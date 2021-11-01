@@ -9,8 +9,6 @@ db = firestore.client()
     
 app = Flask('')
 
-# rn = request number
-# 
 @app.route('/request')
 def requestRoute():
     firebase.setRequest(db,
@@ -20,6 +18,10 @@ def requestRoute():
         request.args.get('highlight', None),
         request.args.get('request', None))
     return "Request sent successfully!"
+
+@app.route('/requests')
+def requests():
+    return render_template('requests.html')
 
 @app.route('/')
 def test():
