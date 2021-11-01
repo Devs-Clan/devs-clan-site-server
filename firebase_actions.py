@@ -3,14 +3,13 @@ from firebase_admin import credentials
 from datetime import datetime
 from private_info import firebase_api
 
-    
 class firebase_actions:
 
-    def setRequest(self, db, request_number, user, user_icon, highlight, request):
-        doc_ref = db.collection(u'requests').document(request_number)
+    def setRequest(self, db, rn, user, avatarurl, highlight, request):
+        doc_ref = db.collection(u'requests').document(rn)
         doc_ref.set({
             u'user': user,
-            u'user_icon': user_icon,
+            u'avatarurl': avatarurl,
             u'highlight': highlight,
             u'request': request,
             u'time': datetime.now().strftime("%d/%m/%Y %H:%M:%S")
