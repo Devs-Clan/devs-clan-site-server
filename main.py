@@ -2,25 +2,28 @@ from firebase_actions import firebase_actions
 from firebase_admin import firestore
 from flask import Flask, render_template, request
 from threading import Thread
+from github_actions import github_actions
 
 firebase = firebase_actions()
 db = firestore.client()
 # print(firebase.verifyRequest(db, 3))
 
+g = github_actions()
+
+
 app = Flask('')
 
 @app.route('/request')
 def requestRoute():
+
+    memberInfo = g.getMemberInfo(memberName=request.args.get('user', None))
+
     firebase.setRequest(db, request.args.get('rn', None),
-                        request.args.get('user', None),
-                        request.args.get('avatarurl', None),
+                        memberInfo['user'],
+                        memberInfo['avatarurl'],
                         request.args.get('highlight', None),
                         request.args.get('request', None))
-    return "Request sent successfully!"
-
-@app.route('/requests')
-def requests():
-    return render_template('requests.html')
+    return "We have sent your request " + str(memberInfo['user']) + ". Please return to requests section."
 
 @app.route('/')
 def test():
@@ -32,6 +35,5 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
-
 
 keep_alive()
